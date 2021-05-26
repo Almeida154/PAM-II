@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react'
 import Style from '../assets/css/dashboard'
 
 import {
-    View, Text, FlatList, StatusBar, ActivityIndicator
+    View, Text, FlatList, StatusBar, ActivityIndicator, SafeAreaView, TouchableOpacity
 } from 'react-native'
 
 import { Searchbar } from 'react-native-paper'
@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { faHandPointRight } from '@fortawesome/free-solid-svg-icons'
 
-export default () => {
+export default ({navigation}) => {
 
     const [isLoading, setLoading] = useState(true)
     const [technicalities, setTechnicalities] = useState([])
@@ -28,47 +28,27 @@ export default () => {
         finally { setLoading(false) }
     }
 
-    async function getCategoriesByTechnicalityId(url) {
-        try {
-            //console.log(url)
-            let req = await fetch(url)
-            let res = await req.json()
-            let categories = []
-            res.map(categ => categories.push(categ.category))
-            return categories
-        } 
-        catch (error) { console.log(error) }
-    }
-
-    async function setCategories(id) {
-
-        let data = await getCategoriesByTechnicalityId(`http://192.168.0.17:8000/api/categories/2`)
-        console.log(data)
-
-    }
-
     useEffect(() => {
         getTechnicalities('http://192.168.0.17:8000/api/technicalities')
     }, [])
 
     return(
-        <View style={Style.container}>
+        <SafeAreaView style={Style.container}>
             <StatusBar backgroundColor='#054A91' />
             <View style={Style.header}>
                 <Text style={Style.title}>ServeX</Text>
                 <Searchbar 
                     style={Style.search}
-                    theme={{colors: {text: "#f6f6f6", primary: "#FFA957", placeholder: "#FFA957"}}}
-                    iconColor='#F17300'
+                    theme={{colors: {text: "#f6f6f6", primary: "#FFA957", placeholder: "#12253F"}}}
+                    iconColor='#FFA046'
                     placeholder='Search'
                     clearIcon={() => (
-                        <FontAwesomeIcon icon={ faTimes } />
+                        <FontAwesomeIcon icon={ faTimes } color='#fff' />
                     )} />
             </View>
 
             <View style={Style.cardsContainer}>
-                {
-                    isLoading && 
+                {isLoading && 
                     <View style={Style.containerLoader}>
                         <ActivityIndicator size='large' color='#E8871E'/>
                         <Text style={Style.loadingText}>Loading</Text>
@@ -78,17 +58,24 @@ export default () => {
                     style={Style.flatList}
                     data={technicalities}
                     keyExtractor={item => item.id}
-                    renderItem={({item}) =>
-                        <View style={Style.card}>
+                    renderItem={({item}) => 
+                        <TouchableOpacity 
+                            activeOpacity={.8}
+                            style={Style.card}
+                            onPress={() => navigation.navigate('Detail', {id: item.id})}>    
                             <Text numberOfLines={1} style={Style.titleCard}>{item.technicality}</Text>
                             <Text numberOfLines={2} style={Style.descriptionCard}>{item.description}</Text>
                             <View style={Style.tagsContainer}>
-                                <FontAwesomeIcon icon={ faHandPointRight } color='#254A7E' />
-                                {/* {setCategories(item.id)} */}
+                                <FontAwesomeIcon icon={faHandPointRight} color='#254A7E' size={20}/>
+                                <Text numberOfLines={1} style={Style.tagsCard}>
+                                    {item.categories.map((categ, index, array) => index === array.length -1 ? categ : `${categ}, `)}
+                                </Text>
                             </View>
-                        </View>
-                    } />
+                        </TouchableOpacity>
+                    }
+                    ListHeaderComponent={() => <Text style={Style.headerCards}>Technicalities</Text>}
+                    ListFooterComponent={() => <Text style={Style.footerCards}>by mtec blinders</Text>}/>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }

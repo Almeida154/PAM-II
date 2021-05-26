@@ -32,9 +32,9 @@ const Style = StyleSheet.create({
         flex: 1
     },
     text: {
-        fontFamily: 'Poppins-Thin',
+        fontFamily: 'Poppins-Bold',
         fontSize: 60,
-        color: '#fff'
+        color: '#A34F00'
     },
     container: height => ({
         height: height,

@@ -10,7 +10,7 @@ export default StyleSheet.create({
         padding: 20,
     },
     title: {
-        fontSize: 35,
+        fontSize: 38,
         color: '#183153',
         fontFamily: 'Poppins-Bold',
     },
@@ -23,28 +23,25 @@ export default StyleSheet.create({
         borderRadius: 10,
     },
     cardsContainer: {
+        flex: 1,
         backgroundColor: '#f6f6f6',
-        height: '100%',
-        width: '100%',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         elevation: 20,
-    },
-    flatList: {
-        paddingVertical: 20
     },
     card: {
         backgroundColor: 'white',
         padding: 16,
         elevation: 6,
         borderRadius: 10,
-        marginHorizontal: 20,
-        marginBottom: 10
+        marginHorizontal: 25,
+        marginVertical: 8
     },
     titleCard: {
         fontFamily: 'Poppins-Bold',
         fontSize: 24,
         color: '#000',
+        textTransform: 'uppercase'
     },
     descriptionCard: {
         fontFamily: 'Poppins-Regular',
@@ -52,8 +49,15 @@ export default StyleSheet.create({
         color: '#000',
         opacity: .6
     },
+    tagsCard: {
+        paddingLeft: 10,
+        fontFamily: 'Poppins-Regular',
+        fontSize: 16,
+        color: '#254A7E',
+    },
     tagsContainer: {
         marginTop: 8,
+        flexDirection: 'row'
     },
     containerLoader: {
         alignSelf: 'center',
@@ -61,9 +65,26 @@ export default StyleSheet.create({
         justifyContent: 'center',
     },
     loadingText: {
-        color: '#343234',
+        color: '#183153',
         fontSize: 22,
         fontFamily: 'Poppins-Bold',
         marginTop: 20
+    },
+    headerCards: {
+        opacity: .1,
+        fontSize: 30,
+        fontFamily: 'Poppins-Light',
+        paddingTop: 20,
+        marginHorizontal: 25,
+    },
+    footerCards: {
+        opacity: .3,
+        marginTop: 20,
+        textAlign: 'center',
+        fontSize: 16,
+        fontFamily: 'Poppins-Bold',
+        padding: 16,
+        color: '#A34F00',
+        backgroundColor: '#D56600',
     }
 })
