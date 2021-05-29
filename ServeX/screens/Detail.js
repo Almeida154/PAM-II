@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react'
 import Style from '../assets/css/detail'
 
 import {
-    View, Text, SafeAreaView, StatusBar, ActivityIndicator, FlatList
+    View, Text, StatusBar, ActivityIndicator
 } from 'react-native'
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -50,8 +50,8 @@ export default ({route, navigation}) => {
             </View>
             <Text style={Style.desc}>{technicality.description}</Text>
             <Text style={Style.tagsText}>Tags:</Text>
-            {categories.map(categ => (
-                <View style={Style.categoryContainer}>
+            {categories.map((categ, index) => (
+                <View key={index} style={Style.categoryContainer}>
                     <FontAwesomeIcon icon={faHandPointRight} color='#B85900' size={25} />
                     <Text style={Style.categoryText}>{categ}</Text>
                 </View>

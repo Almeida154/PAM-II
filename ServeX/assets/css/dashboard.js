@@ -18,9 +18,22 @@ export default StyleSheet.create({
         alignSelf: 'center',
         width: '80%',
         marginTop: 10,
-        marginBottom: 20,
+        marginBottom: 10,
         backgroundColor: '#183153',
         borderRadius: 10,
+    },
+    containerPicker: {
+        alignSelf: 'center',
+        backgroundColor: '#183153',
+        width: '80%',
+        marginBottom: 10,
+        height: 50,
+        borderRadius: 10
+    },
+    pickerItem: {
+        backgroundColor: 'red',
+        color: 'black',
+        borderRadius: 100,
     },
     cardsContainer: {
         flex: 1,
@@ -70,6 +83,10 @@ export default StyleSheet.create({
         fontFamily: 'Poppins-Bold',
         marginTop: 20
     },
+    iconNotFound: {
+        alignSelf: 'center',
+        marginTop: 180,
+    },
     headerCards: {
         opacity: .1,
         fontSize: 30,
@@ -78,13 +95,6 @@ export default StyleSheet.create({
         marginHorizontal: 25,
     },
     footerCards: {
-        opacity: .3,
-        marginTop: 20,
-        textAlign: 'center',
-        fontSize: 16,
-        fontFamily: 'Poppins-Bold',
-        padding: 16,
-        color: '#A34F00',
-        backgroundColor: '#D56600',
+        height: 22,
     }
 })
