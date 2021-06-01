@@ -96,5 +96,12 @@ export default StyleSheet.create({
     },
     footerCards: {
         height: 22,
+    },
+    fab: {
+        position: 'absolute',
+        margin: 16,
+        right: 0,
+        bottom: 0,
+        backgroundColor: '#FFA046'
     }
 })

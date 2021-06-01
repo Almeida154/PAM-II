@@ -1,13 +1,14 @@
 import 'react-native-gesture-handler'
 import React, { useState, useEffect, useRef } from 'react'
 
+// Components
+
 import {
     View, Text, FlatList, StatusBar, ActivityIndicator, SafeAreaView, TouchableOpacity
 } from 'react-native'
 
-// Components
-
 import { Searchbar } from 'react-native-paper'
+import { FAB } from 'react-native-paper'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { Picker } from '@react-native-picker/picker'
 
@@ -141,6 +142,7 @@ export default ({ navigation }) => {
     return (
         <SafeAreaView style={Style.container}>
             <StatusBar backgroundColor='#054A91' />
+
             <View style={Style.header}>
                 <Text style={Style.title}>ServeX</Text>
                 <Searchbar
@@ -210,6 +212,10 @@ export default ({ navigation }) => {
                     }
                     ListHeaderComponent={() => technicalitiesActual.length > 0 ? <Text style={Style.headerCards}>Technicalities</Text> : <View></View>}
                     ListFooterComponent={() => <View style={Style.footerCards}/>} />
+                <FAB
+                    style={Style.fab}
+                    icon='plus'
+                    onPress={() => navigation.navigate('Add')}/>
             </View>
         </SafeAreaView >
     )
