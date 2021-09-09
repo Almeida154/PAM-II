@@ -1,112 +1,116 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
-import type {Node} from 'react';
+import React, { useEffect } from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
   View,
+  Image,
+  ImageBackground,
+  StyleSheet,
+  StatusBar
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
+import { gyroscope } from 'react-native-sensors';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const App = () => {
+  const gyroValue = useSharedValue({ x: 0, y: 0, z: 0 });
+  const prev = useSharedValue({ x: 0, y: 0 });
+  const derivedTranslations = useDerivedValue(() => {
+    'worklet';
+    const MAX_X = 60;
+    const MAX_Y = 60;
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+    let newX = prev.value.x + gyroValue.value.y * -1;
+    let newY = prev.value.y + gyroValue.value.x * -1;
+
+    if (Math.abs(newX) >= MAX_X) newX = prev.value.x;
+    if (Math.abs(newY) >= MAX_Y) newY = prev.value.y;
+
+    prev.value = { x: newX, y: newY };
+    return { x: newX, y: newY };
+
+  }, [gyroValue.value]);
+
+  useEffect(() => {
+    const subscription = gyroscope.subscribe(({ x, y, z }) => {
+      gyroValue.value = { x, y, z };
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [gyroValue.value]);
+
+  const AnimatedStyles = {
+    motion: useAnimatedStyle(() => {
+      return {
+        transform: [
+          { translateX: withSpring(derivedTranslations.value.x) },
+          { translateY: withSpring(derivedTranslations.value.y) }
+        ]
+      }
+    })
+  }
+
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    <SafeAreaView>
+      <StatusBar translucent backgroundColor="transparent" />
+      <ImageBackground style={Style.container} source={require('./src/img/bgstreet.png')} resizeMode="cover">
+        <Animated.View style={AnimatedStyles.motion}>
+          <Image style={Style.item} source={require('./src/img/tommy.png')} />
+        </Animated.View>
+        <View style={Style.footer}>
+          <Image style={Style.shadow} source={require('./src/img/shadow.png')} />
+          <View style={Style.iconContainer}>
+            <Image style={Style.icon} source={require('./src/img/letter.png')} />
+          </View>
         </View>
-      </ScrollView>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+const Style = StyleSheet.create({
+  container: {
+    position: 'relative',
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  item: {
+    height: 500,
+    resizeMode: 'contain'
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  footer: {
+    position: 'absolute',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: 260,
+    bottom: 0,
   },
-  highlight: {
-    fontWeight: '700',
+  shadow: {
+    height: 76,
   },
+  iconContainer: {
+    backgroundColor: 'yellow',
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: '#000',
+    width: '100%',
+    flex: 1,
+  },
+  icon: {
+    height: 100,
+    marginTop: 24,
+    resizeMode: 'contain'
+  }
 });
 
 export default App;
